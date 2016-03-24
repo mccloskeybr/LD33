@@ -1,6 +1,5 @@
 package ai;
 
-import ld33.component.*;
 import ld33.map.map_objects.MapObject;
 import ld33.map.map_objects.entity.Archer;
 import ld33.state.GameState;
@@ -121,6 +120,8 @@ public class AI_Main extends JPanel{
 
             MapObject closestObject;
             double input[] = new double[2];
+            input[0] = -1;
+            input[1] = -1;
 
             if (allArrows.size() != 0) {
                 closestObject = allArrows.get(0);
