@@ -139,10 +139,10 @@ public class GameState implements State {
             for (int i = 0; i < enemies.size(); i++){
                 //hit by player
                 if (player.getX() + 384 > enemies.get(i).getX() && player.isStriking() &&
-                        player.getX() < enemies.get(i).getX() && player.isStriking()){
+                        player.getX() < enemies.get(i).getX()){
 
                     System.out.println("PUNCH");
-                    score += 5;
+                    score += 50;
 
                     enemies.remove(i);
                     audioHandler.playAudio("/sound/splat.wav", -20f);
@@ -176,7 +176,7 @@ public class GameState implements State {
                             new AudioHandler().playAudio("/sound/playerhit.wav", 0.0f);
                         } else {
                             System.out.println("BLOCK");
-                            score += 5;
+                            score += 10;
                         }
                         enemies.get(i).getArrows().remove(j);
                         j--;
@@ -224,7 +224,7 @@ public class GameState implements State {
                         if (enemies.get(j).getX() < map.getBuildings().get(i).getX() + 192 &&
                                 enemies.get(j).getX() > map.getBuildings().get(i).getX()){
                             enemies.remove(j);
-                            score += 100;
+                            score += 50;
                             break;
                         }
                     }
@@ -234,7 +234,7 @@ public class GameState implements State {
                     if (map.getBuildings().get(i).getY() > Window.WINDOW_HEIGHT){
                         map.getBuildings().remove(i);
                         i--;
-                        score += 15;
+                        score += 100;
                     }
                 }
             }

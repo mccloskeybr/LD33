@@ -15,6 +15,7 @@ public class Main extends JPanel{
     public static final String NAME_GAME = "Colossus Guard";
 
     private boolean cap;
+    private boolean render;
 
     public static void main(String[] args){
 
@@ -30,6 +31,7 @@ public class Main extends JPanel{
 
     public Main(Window window){
         this.window = window;
+        render = true;
 
         window.addKeyListener(new KeyListener() {
             @Override
@@ -40,6 +42,8 @@ public class Main extends JPanel{
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_Z)
                     cap = !cap;
+                else if (e.getKeyCode() == KeyEvent.VK_R)
+                    render = !render;
                 else
                     StateManager.getCurrentState().keyPressed(e.getKeyCode());
             }
@@ -71,6 +75,8 @@ public class Main extends JPanel{
     }
 
     public void init(){
+        window.draw(this);
+
         StateManager.resetGame();
         isRunning = true;
     }
@@ -85,8 +91,9 @@ public class Main extends JPanel{
         }
 
         StateManager.getCurrentState().update(dt);
-        window.draw(this);
-        repaint();
+
+        if (render)
+            repaint();
     }
 
     @Override

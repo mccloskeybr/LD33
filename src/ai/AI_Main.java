@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by mccloskeybr on 3/18/16.
@@ -65,6 +66,12 @@ public class AI_Main extends JPanel{
                 worst = i;
 
         }
+
+        Random random = new Random();
+        if (Math.random() < 0.25)
+            best = random.nextInt(reward.length);
+        if (Math.random() < 0.25)
+            secondBest = random.nextInt(reward.length);
 
         i_parent1 = best;
         i_parent2 = secondBest;
@@ -130,7 +137,7 @@ public class AI_Main extends JPanel{
                         closestObject = object;
                 }
 
-                if (closestObject.getDistance(state.getPlayer()) >= 0 && closestObject.getDistance(state.getPlayer()) < 500) {
+                if (closestObject.getDistance(state.getPlayer()) >= 0 && closestObject.getDistance(state.getPlayer()) < 1000) {
                     input[0] = 1.0;
                 }
             }
@@ -143,37 +150,51 @@ public class AI_Main extends JPanel{
                         closestObject = object;
                 }
 
-                if (closestObject.getDistance(state.getPlayer()) >= 0 && closestObject.getDistance(state.getPlayer()) < 200) {
+                if (closestObject.getDistance(state.getPlayer()) >= 0 && closestObject.getDistance(state.getPlayer()) < 500) {
                     input[1] = 1.0;
                 }
             }
 
             double[] output = brains[i_currentBrain].forward(input);
 
-            right = q = e = space = false;
-
-            if (output[0] > 0.5)
-                q = true;
-            if (output[1] > 0.5)
-                e = true;
-            if (output[2] > 0.5)
-                space = true;
-            if (output[3] > 0.5)
-                right = true;
-
-            if (output[0] > 0.5) //punch
+            if (!q && output[0] > 0.5) {
                 state.keyPressed(KeyEvent.VK_Q);
-
-            else if (output[1] > 0.5) //block
-                state.keyPressed(KeyEvent.VK_E);
-
-            else if (output[2] > 0.5) //jump
-                state.keyPressed(KeyEvent.VK_SPACE);
-
-            else if (output[3] > 0.5) { //move
-                state.keyPressed(KeyEvent.VK_RIGHT);
-                timer = 0;
+                q = true;
             }
+            else if (q && output[0] <= 0.5) {
+                state.keyReleased(KeyEvent.VK_Q);
+                q = false;
+            }
+
+            if (!e && output[1] > 0.5) {
+                state.keyPressed(KeyEvent.VK_E);
+                e = true;
+            }
+            else if (e && output[1] <= 0.5) {
+                state.keyReleased(KeyEvent.VK_E);
+                e = false;
+            }
+
+            if (!space && output[2] > 0.5) {
+                state.keyPressed(KeyEvent.VK_SPACE);
+                space = true;
+            }
+            else if (space && output[2] <= 0.5) {
+                state.keyReleased(KeyEvent.VK_SPACE);
+                space = false;
+            }
+
+            if (!right && output[3] > 0.5) {
+                state.keyPressed(KeyEvent.VK_RIGHT);
+                right = true;
+            }
+            else if (right && output[3] <= 0.5) {
+                state.keyReleased(KeyEvent.VK_RIGHT);
+                right = false;
+            }
+
+            if (state.getPlayer().isMoving() && !state.getPlayer().isBlocking() && !state.getPlayer().isStriking())
+                timer = 0;
 
         }
 
