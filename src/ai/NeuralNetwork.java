@@ -66,7 +66,11 @@ public class NeuralNetwork {
             // hidden_2 to output
             for (int i = 0; i < hidden_2.length; i++)
                 for (int j = 0; j < output.length; j++)
-                    output[j] = hidden_2[i] * weights[(N_INPUT * N_HIDDEN) + (N_HIDDEN * N_HIDDEN) + i * N_OUTPUT + j];
+                    output[j] += hidden_2[i] * weights[(N_INPUT * N_HIDDEN) + (N_HIDDEN * N_HIDDEN) + i * N_OUTPUT + j];
+
+            // activate output
+            for (int i = 0; i < output.length; i++)
+                output[i] = sigmoid(output[i]);
 
             return output;
 
